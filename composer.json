@@ -24,7 +24,10 @@
         "monolog/monolog": "^2.1",
         "izniburak/router": "^2.0",
         "ext-pdo": "*",
-		"vlucas/phpdotenv": "^5.5",
-		"josantonius/session": "^2.0"
+        "vlucas/phpdotenv": "^5.5",
+        "josantonius/session": "^2.0"
+    },
+    "scripts": {
+        "bin-init": "php ./bin/init.php -e dev"
     }
 }

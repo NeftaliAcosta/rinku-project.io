@@ -8,7 +8,6 @@ use Dotenv\Dotenv;
  * System Environment
  * Class made to work with environment
  *
- *
  * @author Neftalí Marciano Acosta <neftaliacosta@outlook.com>
  * @copyright (c) 2023, RINKU-PROJECT.io
  * @link https://rinku-project.io/
