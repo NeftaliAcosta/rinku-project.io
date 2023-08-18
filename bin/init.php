@@ -45,10 +45,10 @@ Cli::e(
     ConsoleBackgroundColors::Yellow
 );
 
-//Creating a new sql instance with a useful database connection
+// Creating a new sql instance with a useful database connection
 $o_sql = new MySql();
 
-//Add table container
+// Add table container
 $container = new Container();
 
 try {
@@ -60,7 +60,7 @@ try {
 
     // Check for last modified file in the init folder
     $files = array_combine($init_path, array_map("basename", $init_path));
-    // sort all files in our directory in a descending manner
+    // Sort all files in our directory in a descending manner
     arsort($files);
     $versions = str_replace(".php", "", $files);
 
@@ -75,7 +75,7 @@ try {
     // If we don't have a version then we'll create a new record with our first init record
     // iterate over all init files to be executed by our migration system
     foreach ($init_path as $filename) {
-        // extract filename to compare with our current database version
+        // Extract filename to compare with our current database version
         $init_file = preg_replace('/\\.[^.\\s]{3,4}$/', '', basename($filename));
         if (isset($version['version'])) {
             if ($version['version'] >= $init_file) {
@@ -91,7 +91,7 @@ try {
         // Including each init file to be executed by our system
         include $filename;
         print("\n");
-        // set version processed in our DB table of versions
+        // Set version processed in our DB table of versions
         DB::setVersion((int)$init_file);
     }
     Cli::e(
@@ -100,6 +100,6 @@ try {
         ConsoleBackgroundColors::Yellow
     );
 } catch (SystemException $e) {
-    // show error in case of exception thrown
+    // Show error in case of exception thrown
     print("There was an error: " . $e->getMessage());
 }
