@@ -18,24 +18,27 @@ class Container{
 
     /**
      * Alias tables dictionary
-     * @var array $tablas
+     *
+     * @var array $tables
      */
-    public array $tablas = array(
-        'rinku_users' => 'users',
+    public static array $tables = array(
+        'users' => 'rinku_users',
+        'employees' => 'rinku_employees',
+        'monthly_movements' => 'rinku_monthly_movements',
 
     );
 
     /**
      * Gets the actual name of the table in the database
      *
-     * @param string $tabla
+     * @param string $table
      * @return string
      */
-    public function getTable(string $tabla): string
+    public static function getTable(string $table): string
     {
         try {
-            if (array_key_exists($tabla, $this->tablas)) {
-                return $this->tablas[$tabla];
+            if (array_key_exists($table, self::$tables)) {
+                return self::$tables[$table];
             }else{
                 throw new TableNotFoundException('The alias table does not exist.');
             }
