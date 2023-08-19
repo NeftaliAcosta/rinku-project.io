@@ -158,3 +158,26 @@ BEGIN
     WHERE `id` = monthly_movement_id;
 END
 ")->execute();
+
+// Print message
+Cli::e(
+    "Creating Stored Procedure `sp_MonthlyMovementView` in table:`{$table_monthly_movements}`",
+    ConsoleForegroundColors::Green
+);
+
+// Execute script
+$o_mysql->custom("
+CREATE PROCEDURE `sp_MonthlyMovementView`(
+    IN `monthly_movement_id` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT 'View information by monthly_movement_id'
+BEGIN
+    SELECT `id`, `employee_id`, `deliveries`, `extra_salary`, `taxes`, `grocery_vouchers`, `creation_date`
+    FROM {$table_monthly_movements}
+    WHERE `id` = monthly_movement_id;
+END
+")->execute();
