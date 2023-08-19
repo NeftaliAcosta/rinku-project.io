@@ -102,7 +102,7 @@ CONTAINS SQL
 SQL SECURITY DEFINER
 COMMENT 'View information by employee_id'
 BEGIN
-    SELECT id, code, name, enum_rol, creation_date
+    SELECT id, code, name, enum_rol, base_salary, creation_date
     FROM {$table}
     WHERE id = emp_id;
 END
