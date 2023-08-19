@@ -25,7 +25,7 @@ $o_mysql->custom("
         `code` VARCHAR(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
         `name` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
         `enum_rol` INT NOT NULL,
-        `base_salary` INT DEFAULT '1440',
+        `base_salary` INT DEFAULT '5760',
         `creation_date` DATETIME NOT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
