@@ -10,16 +10,17 @@ if (session_status() == PHP_SESSION_NONE) {
 date_default_timezone_set('America/Mexico_City');
 
 /**
- * Load config system
- */
-require_once "config.php";
-
-/**
  * Load composer
  */
 require __DIR__.'/../vendor/autoload.php';
 
 // Load route controller
+use App\Core\Environment;
 Use App\Core\Route;
+
+// Load environment here
+Environment::load();
+
+// Start Route system
 $init = new Route();
 $init->start();
