@@ -28,6 +28,7 @@
         "josantonius/session": "^2.0"
     },
     "scripts": {
-        "bin-init": "php ./bin/init.php -e dev"
+        "bin-init": "php ./bin/init.php -e dev",
+        "bin-recovery": "php ./bin/recovery.php -e dev -d display_errors=on"
     }
 }
