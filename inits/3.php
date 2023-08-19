@@ -91,3 +91,70 @@ $o_mysql->custom("
         VALUES (local_emp_id, emp_deliveries, local_extra_salary, local_taxes, local_grocery_vouchers, NOW());
     END
 ")->execute();
+
+
+// Print message
+Cli::e(
+    "Creating Stored Procedure `sp_MonthlyMovementUpdate` in table:`{$table_monthly_movements}`",
+    ConsoleForegroundColors::Green
+);
+
+// Execute script
+$o_mysql->custom("
+CREATE PROCEDURE `sp_MonthlyMovementUpdate`(
+    IN `monthly_movement_id` INT,
+    IN `emp_deliveries` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT 'Update a monthly record of an employee'
+BEGIN
+    DECLARE local_emp_id INT;
+    DECLARE local_emp_enum_rol INT;
+    DECLARE local_emp_base_salary INT;
+    DECLARE local_extra_salary INT;
+    DECLARE local_bonus_extra_hour INT;
+    DECLARE local_taxes INT DEFAULT 9;
+    DECLARE local_grocery_vouchers DECIMAL(10, 2);
+
+    -- Get employee_id from monthly movement table
+    SELECT `employee_id` INTO local_emp_id
+    FROM {$table_monthly_movements}
+    WHERE id = monthly_movement_id;
+
+    -- Gets employee information based on emp_id parameter
+    SELECT `id`, `enum_rol`, `base_salary` INTO local_emp_id, local_emp_enum_rol, local_emp_base_salary
+    FROM {$table_employees}
+    WHERE `id` = local_emp_id;
+
+    -- Additional salary according to deliveries
+    SET local_extra_salary = emp_deliveries * 5;
+
+    -- Additional salary according to role
+    IF local_emp_enum_rol = 1 THEN
+        SET local_bonus_extra_hour = (8 * 6 * 4) * 10;
+        SET local_extra_salary = local_extra_salary + local_bonus_extra_hour;
+    ELSEIF local_emp_enum_rol = 2 THEN
+        SET local_bonus_extra_hour = (8 * 6 * 4) * 5;
+        SET local_extra_salary = local_extra_salary + local_bonus_extra_hour;
+    END IF;
+
+    -- Calculate taxes
+    IF local_emp_base_salary + local_extra_salary > 10000 THEN
+        SET local_taxes = local_taxes + 3;
+    END IF;
+
+    -- Calculate grocery vouchers
+    SET local_grocery_vouchers = (local_emp_base_salary + local_extra_salary) * 0.04;
+
+    UPDATE {$table_monthly_movements} SET 
+    `deliveries` = emp_deliveries,
+    `extra_salary` = local_extra_salary,
+    `taxes` = local_taxes,
+    `grocery_vouchers` = local_grocery_vouchers,
+    `creation_date` = NOW()
+    WHERE `id` = monthly_movement_id;
+END
+")->execute();
