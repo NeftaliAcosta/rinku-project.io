@@ -22,12 +22,12 @@ Cli::e(
 // Execute script
 $o_mysql->custom("
     CREATE TABLE IF NOT EXISTS `{$table_monthly_movements}` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `employee_id` int NOT NULL,
-        `month` int NOT NULL,
-        `year` year NOT NULL,
-        `deliveries` int NOT NULL,
-        `creation_date` time NOT NULL,
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `employee_id` INT NOT NULL,
+        `month` INT NOT NULL,
+        `year` YEAR NOT NULL,
+        `deliveries` INT NOT NULL,
+        `creation_date` DATETIME NOT NULL,
         PRIMARY KEY (`id`),
         KEY `employee_id` (`employee_id`),
         CONSTRAINT `FK_rinku_monthly_movements_rinku_employees` FOREIGN KEY (`employee_id`) REFERENCES `{$table_employees}` (`id`)
