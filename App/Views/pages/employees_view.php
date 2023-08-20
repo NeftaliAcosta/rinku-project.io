@@ -14,7 +14,7 @@ if (!empty($_POST)) {
     if (!$a_response['success']) {
         echo "<div class='container alert alert-danger' role='alert'>{$a_response['message']}</div>";
     } else {
-        echo "<div class='container alert alert-primary' role='alert'>Empeado actualizado correctamente.</div>";
+        echo "<div class='container alert alert-primary' role='alert'>Empleado actualizado correctamente.</div>";
         header("refresh:1;url=" . $_ENV['__PATH__']. 'employees/all');
     }
 }
