@@ -6,10 +6,10 @@ use App\Core\SystemException;
 use App\Enums\Roles;
 use App\Libs\Validator;
 use App\Models\Employees\Employees;
-use App\Models\Employees\Exceptions\EmployeeCannotBeDeletedException;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
 use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeCreatedException;
 use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeDeletedException;
+use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeUpdatedException;
 use App\Models\MonthlyMovements\Exceptions\MonthlyMovementNotFoundException;
 use App\Models\MonthlyMovements\MonthlyMovements;
 use Buki\Router\Http\Controller;
@@ -102,7 +102,7 @@ class MonthlyMovementsController extends Controller
 
             // Create new row
             $o_monthly_movements->create($o_monthly_movements);
-        } catch (MonthlyMovementNotFoundException|MonthlyMovementCannotBeCreatedException $e) {
+        } catch (MonthlyMovementCannotBeCreatedException $e) {
             $response['success'] = false;
             $response['message'] = $e->getMessage();
 
@@ -133,6 +133,57 @@ class MonthlyMovementsController extends Controller
             $response['data']['employee_id'] = $o_monthly_movements->getEmployeeId();
             $response['data']['deliveries'] = $o_monthly_movements->getDeliveries();
         } catch (MonthlyMovementNotFoundException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+
+            return $response;
+        }
+
+        // Controller response
+        return $response;
+    }
+
+    /**
+     * Update an existing monthly movement
+     *
+     * @param array $data
+     * @return array
+     */
+    public function update(array $data): array
+    {
+        // Variable response
+        $response = [
+            'success' => true,
+            'message' => null
+        ];
+
+        // Get data information
+        $monthly_movements_id = $data['monthly_movements_id'];
+        $deliveries = $data['deliveries'];
+
+        // Validating input data
+        $o_validator = new Validator();
+        $o_validator->name('Momiviento id')->value($monthly_movements_id)->required()->is_int()->min(1);
+        $o_validator->name('Entregas')->value($deliveries)->required()->is_int()->min(1);
+
+        // Response if input data is valid
+        if (!$o_validator->isSuccess()) {
+            $response['success'] = false;
+            $response['message'] = $o_validator->getErrorsHTML();
+
+            return $response;
+        }
+
+        try {
+            // Instance of object model MonthlyMovements
+            $o_monthly_movements = new MonthlyMovements($monthly_movements_id);
+
+            // Set values required
+            $o_monthly_movements->setDeliveries($deliveries);
+
+            // Create new row
+            $o_monthly_movements->update($o_monthly_movements);
+        } catch (MonthlyMovementCannotBeUpdatedException|MonthlyMovementNotFoundException $e) {
             $response['success'] = false;
             $response['message'] = $e->getMessage();
 

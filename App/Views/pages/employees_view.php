@@ -36,7 +36,7 @@ if (!$a_response['success']){
 
 <div class="container pt-md-5">
     <div class="container mt-5">
-        <form action="<?php echo $_ENV['__PATH__']. 'employees/view/'.$employee_id ?>" method="post">
+        <form action="<?php echo $_ENV['__PATH__']. 'employees/view/' . $employee_id ?>" method="post">
             <input type="hidden" name="employee_id" value="<?php echo $employee_id ?>">
             <div class="form-group">
                 <label for="code">Código</label>

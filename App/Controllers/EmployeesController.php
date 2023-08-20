@@ -14,7 +14,7 @@ use Buki\Router\Http\Controller;
 
 /**
  * EmployeesController
- * This is the controller of model Employees
+ * Model controller for table `rinku_employees`
  *
  * @author Neftalí Marciano Acosta <neftaliacosta@outlook.com>
  * @copyright (c) 2023, RINKU-PROJECT.io
