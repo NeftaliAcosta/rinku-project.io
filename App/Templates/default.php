@@ -21,14 +21,14 @@
             <img src="<?php echo $_ENV['__PATH__'].'/resources/img/rinku_logo.png' ?>" alt="Logo" width="200px">
         </div>
         <nav class="my-2 my-md-0 mr-md-3 d-flex align-items-center">
-            <a class="p-2 text-dark" href="#">Inicio</a>
+            <a class="p-2 text-dark" href="<?php echo $_ENV['__PATH__'] ?>">Inicio</a>
             <div class="ml-3 dropdown">
                 <a class="p-2 text-dark dropdown-toggle" href="#" id="empleadosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Empleados
                 </a>
                 <div class="dropdown-menu" aria-labelledby="empleadosDropdown">
-                    <a class="dropdown-item" href="#">Nuevo</a>
-                    <a class="dropdown-item" href="#">Listar todos</a>
+                    <a class="dropdown-item" href="<?php echo $_ENV['__PATH__'] ?>employees/new">Nuevo</a>
+                    <a class="dropdown-item" href="<?php echo $_ENV['__PATH__'] ?>employees/all">Listar todos</a>
                 </div>
             </div>
             <div class="ml-3 dropdown">

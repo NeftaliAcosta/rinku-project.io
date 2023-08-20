@@ -318,15 +318,15 @@ class MySql
                 }
 
                 // Query construction
-                if($value['tipo']=="numeric"){
-                    $this->query_condition .= str_replace('?', $value['valor'], $clave);
+                if($value['type']=="numeric"){
+                    $this->query_condition .= str_replace('?', $value['value'], $clave);
                 }else{
                     if(strpos($clave, '%')>0){
-                        $this->query_condition .= str_replace("%", $value['valor'], $clave);
+                        $this->query_condition .= str_replace("%", $value['value'], $clave);
                         $this->query_condition = str_replace(">", "'%", $this->query_condition);
                         $this->query_condition = str_replace("<", "%'", $this->query_condition);
                     }else{
-                        $this->query_condition .= str_replace('?', "'".$value['valor']."'", $clave);
+                        $this->query_condition .= str_replace('?', "'".$value['value']."'", $clave);
                     }
                 }
 
