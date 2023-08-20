@@ -47,10 +47,6 @@ if (!empty($_POST)) {
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="base_salary">Sueldo base por hora</label>
-                <input type="number" class="form-control" id="base_salary" name="base_salary" value="30">
-            </div>
             <button type="submit" class="btn btn-primary">Crear</button>
         </form>
     </div>

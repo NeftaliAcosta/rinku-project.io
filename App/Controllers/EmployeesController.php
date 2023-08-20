@@ -62,14 +62,12 @@ class EmployeesController extends Controller
         $code = $data['code'];
         $name = $data['name'];
         $enum_rol = $data['enum_rol'];
-            $base_salary = $data['base_salary'];
 
         // Validating input data
         $o_validator = new Validator();
         $o_validator->name('Código')->value($code)->required()->is_alphanum()->minLength(5)->maxLength(5);
         $o_validator->name('Nombre')->value($name)->required()->is_alpha()->minLength(5)->maxLength(150);
         $o_validator->name('Rol')->value($enum_rol)->required()->is_int()->inArray(Roles::toArray());
-        $o_validator->name('Base salarial')->value($base_salary)->required(false)->is_int();
 
         // Response if input data is valid
         if (!$o_validator->isSuccess()) {
