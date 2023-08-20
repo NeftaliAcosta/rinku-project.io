@@ -48,12 +48,13 @@ class MonthlyMovementsController extends Controller
         // Adding information in to array
         foreach ($data as &$value) {
             $o_employee = new Employees($value['employee_id']);
+            $value['total_salary'] = '$' . number_format($value['extra_salary'] + $o_employee->getBaseSalary(), 2, '.', ',');
             $value['employee_code'] = $o_employee->getCode();
             $value['employee_name'] = $o_employee->getName();
             $value['employee_enum_rol'] = Roles::pretty($o_employee->getEnumRol());
-            $value['employee_salary_base'] = '$'.$o_employee->getBaseSalary();
+            $value['employee_salary_base'] = '$' . number_format($o_employee->getBaseSalary(), 2, '.', ',');
             $value['grocery_vouchers'] = '$'.$value['grocery_vouchers'];
-            $value['extra_salary'] = '$'.$value['extra_salary'];
+            $value['extra_salary'] = '$' . number_format($value['extra_salary'], 2, '.', ',');
             $value['taxes'] = $value['taxes'].'%';
         }
 
