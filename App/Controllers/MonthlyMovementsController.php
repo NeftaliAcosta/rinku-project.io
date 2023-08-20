@@ -6,8 +6,10 @@ use App\Core\SystemException;
 use App\Enums\Roles;
 use App\Libs\Validator;
 use App\Models\Employees\Employees;
+use App\Models\Employees\Exceptions\EmployeeCannotBeDeletedException;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
 use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeCreatedException;
+use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeDeletedException;
 use App\Models\MonthlyMovements\Exceptions\MonthlyMovementNotFoundException;
 use App\Models\MonthlyMovements\MonthlyMovements;
 use Buki\Router\Http\Controller;
@@ -60,7 +62,7 @@ class MonthlyMovementsController extends Controller
     }
 
     /**
-     * Save new employee
+     * Save a new monthly movement
      *
      * @param array $data
      * @return array
@@ -111,4 +113,46 @@ class MonthlyMovementsController extends Controller
         return $response;
     }
 
+    /**
+     * Delete an existing monthly movement
+     *
+     * @param int $monthly_movement_id
+     * @return array
+     */
+    public function delete(int $monthly_movement_id): array
+    {
+        // Variable response
+        $response = [
+            'success' => true,
+            'message' => null
+        ];
+
+        // Validating input data
+        $o_validator = new Validator();
+        $o_validator->name('Movimiento mensual id')->value($monthly_movement_id)->required()->is_int()->min(1);
+
+        // Response if input data is valid
+        if (!$o_validator->isSuccess()) {
+            $response['success'] = false;
+            $response['message'] = $o_validator->getErrorsHTML();
+
+            return $response;
+        }
+
+        try {
+            // Instance of object model MonthlyMovements
+            $o_monthly_movements = new MonthlyMovements($monthly_movement_id);
+
+            // Delete monthly movement
+            $o_monthly_movements->delete();
+        } catch (MonthlyMovementCannotBeDeletedException|MonthlyMovementNotFoundException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+
+            return $response;
+        }
+
+        // Controller response
+        return $response;
+    }
 }

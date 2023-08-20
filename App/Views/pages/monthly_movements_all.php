@@ -84,9 +84,9 @@ $months = array(
             <td><?= $value['grocery_vouchers']; ?></td>
             <td><?= $value['creation_date']; ?></td>
             <td>
-                <a href="<?php echo $_ENV['__PATH__']. 'employees/view/' . $value['id'] ?>" class="btn btn-primary mb-1">Ver</a>
+                <a href="<?php echo $_ENV['__PATH__']. 'monthly-movements/view/' . $value['id'] ?>" class="btn btn-primary mb-1">Ver</a>
                 <br>
-                <a href="<?php echo $_ENV['__PATH__']. 'employees/delete/' . $value['id'] ?>" class="btn btn-danger">Eliminar</a>
+                <a href="<?php echo $_ENV['__PATH__']. 'monthly-movements/delete/' . $value['id'] ?>" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         <?php endforeach; ?>
