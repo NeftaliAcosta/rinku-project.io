@@ -36,8 +36,8 @@
                     Registros mensuales
                 </a>
                 <div class="dropdown-menu" aria-labelledby="registrosMensualesDropdown">
-                    <a class="dropdown-item" href="#">Nuevo</a>
-                    <a class="dropdown-item" href="#">Listar todos</a>
+                    <a class="dropdown-item" href="<?php echo $_ENV['__PATH__'] ?>monthly-movements/new">Nuevo</a>
+                    <a class="dropdown-item" href="<?php echo $_ENV['__PATH__'] ?>monthly-movements/all">Listar todos</a>
                 </div>
             </div>
         </nav>
