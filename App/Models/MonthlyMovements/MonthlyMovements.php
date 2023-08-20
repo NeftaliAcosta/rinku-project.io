@@ -295,7 +295,7 @@ class MonthlyMovements
             $o_mySql = new MySql();
 
             $o_mySql->custom("
-                CALL sp_MonthlyMovementDeleted({$this->id});
+                CALL sp_MonthlyMovementDelete({$this->id});
             ")->execute();
         } else {
             throw new MonthlyMovementCannotBeDeletedException('Monthly movement can´t be deleted.');
