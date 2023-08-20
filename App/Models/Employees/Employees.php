@@ -263,8 +263,7 @@ class Employees
      */
     public function delete(): bool
     {
-        if (
-            $this->id != null) {
+        if ($this->id != null) {
             // Instance of Sql class
             $o_mySql = new MySql();
 
