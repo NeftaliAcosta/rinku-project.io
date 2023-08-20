@@ -145,7 +145,11 @@ class MySql
             $_ENV['DB_HOST']
         );
 
+        // Instance of PDO controller
         $this->o_pdo = $pdo_temp->connect();
+
+        // Use our database
+        $this->custom("USE " . $_ENV['DB_NAME'])->execute();
     }
 
     /**

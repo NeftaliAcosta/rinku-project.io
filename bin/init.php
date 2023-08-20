@@ -46,7 +46,7 @@ Cli::e(
 );
 
 // Creating a new sql instance with a useful database connection
-$o_sql = new MySql();
+$o_mysql = new MySql();
 
 // Add table container
 $container = new Container();
