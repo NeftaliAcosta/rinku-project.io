@@ -12,10 +12,10 @@ $roles = Roles::getPrettyRolesArray();
 // Logic to save new register
 if (!empty($_POST)) {
     $o_employee_controller = new EmployeesController();
-    $response = $o_employee_controller->create($_POST);
+    $a_response = $o_employee_controller->create($_POST);
 
-    if (!$response['success']) {
-        echo "<div class='container alert alert-danger' role='alert'>{$response['message']}</div>";
+    if (!$a_response['success']) {
+        echo "<div class='container alert alert-danger' role='alert'>{$a_response['message']}</div>";
     } else {
         echo "<div class='container alert alert-primary' role='alert'>Empeado creado correctamente.</div>";
         header("refresh:1;url=" . $_ENV['__PATH__']. 'employees/all');

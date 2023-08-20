@@ -35,9 +35,9 @@ $data = $o_employees_controller->getAll();
             <td><?= $value['base_salary']; ?></td>
             <td><?= $value['creation_date']; ?></td>
             <td>
-                <button type="button" class="btn btn-primary mb-1">Ver</button>
+                <a href="<?php echo $_ENV['__PATH__']. 'employees/view/' . $value['id'] ?>" class="btn btn-primary mb-1">Ver</a>
                 <br>
-                <button type="button" class="btn btn-danger">Eliminar</button>
+                <a href="<?php echo $_ENV['__PATH__']. 'employees/delete/' . $value['id'] ?>" class="btn btn-danger">Eliminar</a>
             </td>
         </tr>
         <?php endforeach; ?>
