@@ -181,3 +181,25 @@ BEGIN
     WHERE `id` = monthly_movement_id;
 END
 ")->execute();
+
+// Print message
+Cli::e(
+    "Creating Stored Procedure `sp_MonthlyMovementDelete` in table:`{$table_monthly_movements}`",
+    ConsoleForegroundColors::Green
+);
+
+// Execute script
+$o_mysql->custom("
+CREATE PROCEDURE `sp_MonthlyMovementDelete`(
+    IN `monthly_movement_id` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT 'Delete an existing row'
+BEGIN
+    -- Deleting row from monthly movements table
+    DELETE FROM `{$table_monthly_movements}` WHERE `id` = monthly_movement_id;
+END
+")->execute();

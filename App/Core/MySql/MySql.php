@@ -291,6 +291,7 @@ class MySql
     {
         $container = new Container;
         $this->table = $container->getTable($alias_table);
+
         return $this;
     }
 
