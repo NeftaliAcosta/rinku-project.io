@@ -231,6 +231,45 @@ class MonthlyMovements
     }
 
     /**
+     * Get all rows
+     *
+     * @param int|null $month_to_search
+     * @return array
+     */
+    public function getAll(int|null $month_to_search): array
+    {
+        $current_year = date("Y");
+
+        // Instance of Sql class
+        $o_mysql = new MySql();
+
+        if ($month_to_search != null) {
+            // $v_where Variable for where clause in the query
+            $v_where = [
+                'YEAR(creation_date) = ?' => [
+                    'type' => 'numeric',
+                    'value' => $current_year,
+                    'separator' => 'AND'
+                ],
+                'MONTH(creation_date) = ?' => [
+                    'type' => 'numeric',
+                    'value' => $month_to_search
+                ]
+            ];
+
+            // Query in database
+            $response = $o_mysql->select()->from($this->alias_table)->where($v_where)->fetchAll()->execute();
+        } else {
+            // Query in database
+            $response = $o_mysql->select()->from($this->alias_table)->fetchAll()->execute();
+        }
+
+
+
+        return $response['data'];
+    }
+
+    /**
      * Create a monthly movement
      *
      * @param MonthlyMovements $monthly_movement
