@@ -114,6 +114,36 @@ class MonthlyMovementsController extends Controller
     }
 
     /**
+     * Get monthly movement by id
+     *
+     */
+    public function view(int $monthly_movement_id): array
+    {
+        // Variable response
+        $response = [
+            'success' => true,
+            'message' => null,
+            'data' => null
+        ];
+
+        try {
+            // Instance of object model MonthlyMovements
+            $o_monthly_movements = new MonthlyMovements($monthly_movement_id);
+
+            $response['data']['employee_id'] = $o_monthly_movements->getEmployeeId();
+            $response['data']['deliveries'] = $o_monthly_movements->getDeliveries();
+        } catch (MonthlyMovementNotFoundException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+
+            return $response;
+        }
+
+        // Controller response
+        return $response;
+    }
+
+    /**
      * Delete an existing monthly movement
      *
      * @param int $monthly_movement_id
