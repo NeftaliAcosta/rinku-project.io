@@ -1,3 +1,4 @@
 
-
-<h1 class="text-center margin-top-6">Test page</h1>
+<div class="container pt-md-2">
+    <h1 class="text-center">Dashboard</h1>
+</div>
