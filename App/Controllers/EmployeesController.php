@@ -7,6 +7,7 @@ use App\Enums\Roles;
 use App\Libs\Validator;
 use App\Models\Employees\Employees;
 use App\Models\Employees\Exceptions\EmployeeCannotBeCreatedException;
+use App\Models\Employees\Exceptions\EmployeeCannotBeDeletedException;
 use App\Models\Employees\Exceptions\EmployeeCannotBeUpdatedException;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
 use Buki\Router\Http\Controller;
@@ -179,6 +180,49 @@ class EmployeesController extends Controller
             // Create new row
             $o_employees->update($o_employees);
         } catch (EmployeeCannotBeUpdatedException|EmployeeNotFoundException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+
+            return $response;
+        }
+
+        // Controller response
+        return $response;
+    }
+
+    /**
+     * Delete an existing employee
+     *
+     * @param int $employee_id
+     * @return array
+     */
+    public function delete(int $employee_id): array
+    {
+        // Variable response
+        $response = [
+            'success' => true,
+            'message' => null
+        ];
+
+        // Validating input data
+        $o_validator = new Validator();
+        $o_validator->name('Empleado id')->value($employee_id)->required()->is_int()->min(1);
+
+        // Response if input data is valid
+        if (!$o_validator->isSuccess()) {
+            $response['success'] = false;
+            $response['message'] = $o_validator->getErrorsHTML();
+
+            return $response;
+        }
+
+        try {
+            // Instance of object model Employees
+            $o_employees = new Employees($employee_id);
+
+            // Delete employee
+            $o_employees->delete();
+        } catch (EmployeeCannotBeDeletedException|EmployeeNotFoundException $e) {
             $response['success'] = false;
             $response['message'] = $e->getMessage();
 

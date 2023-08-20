@@ -21,3 +21,7 @@ $this->route->add('GET|POST', '/employees/view/:id', function($employee_id) {
     include_once __DIR__ . '/../Views/pages/employees_view.php';
 });
 
+$this->route->get('/employees/delete/:id', function($employee_id) {
+    include_once __DIR__ . '/../Views/pages/employees_delete.php';
+});
+
