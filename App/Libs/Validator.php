@@ -11,7 +11,6 @@ namespace App\Libs;
  * @link https://rinku-project.io/
  * @version 1.0
  */
-
 class Validator
 {
 
@@ -129,6 +128,40 @@ class Validator
     }
 
     /**
+     * Minimum field value
+     *
+     * @param int $min
+     * @return Validator
+     */
+    public function min(int $min): Validator
+    {
+        if ($this->value != null) {
+            if ((int)$this->value < $min) {
+                $this->errors[$this->name][] = 'The value of the field is less than the minimum.';
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Maximum field value
+     *
+     * @param int $max
+     * @return Validator
+     */
+    public function max(int $max): Validator
+    {
+        if ($this->value != null) {
+            if ((int)$this->value > $max) {
+                $this->errors[$this->name][] = 'The value of the field is greater than the minimum.';
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Length minimum
      *
      * @param int $min
@@ -210,12 +243,11 @@ class Validator
     /**
      * Check if the value is an integer
      *
-     * @param string $value
      * @return Validator
      */
-    public function is_int(string $value): Validator
+    public function is_int(): Validator
     {
-        if(!filter_var($value, FILTER_VALIDATE_INT)){
+        if($this->value != null && !filter_var($this->value, FILTER_VALIDATE_INT)){
             $this->errors[] = "The field {$this->name} has no valid characters.";
         }
 
@@ -240,12 +272,11 @@ class Validator
     /**
      * Check if the value is pure letters of the alphabet
      *
-     * @param string $value
      * @return Validator
      */
-    public function is_alpha(string $value): Validator
+    public function is_alpha(): Validator
     {
-        if(!filter_var($value, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[a-zA-Z]+$/")))){
+        if(!filter_var($this->value, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/^[a-zA-ZáÁéÉíÍóÓúÚüÜñÑ\s]+$/u')))){
             $this->errors[] = "The field {$this->name} has no valid characters.";
         }
 
@@ -255,17 +286,15 @@ class Validator
     /**
      * Check if the value is pure letters of the alphabet and/or numbers
      *
-     * @param string $value
-     * @return boolean
+     * @return Validator
      */
-    public function is_alphanum(string $value): bool
+    public function is_alphanum(): Validator
     {
-        if(filter_var($value, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[a-zA-Z0-9]+$/")))){
-            return true;
-        }else{
+        if(!filter_var($this->value, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => "/^[a-zA-Z0-9]+$/")))){
             $this->errors[] = "The field {$this->name} has no valid characters.";
-            return false;
         }
+
+        return $this;
     }
 
     /**
@@ -343,6 +372,16 @@ class Validator
         return $this;
     }
 
+    public function inArray(array $enum_array): Validator
+    {
+        $a_values = array_values($enum_array);
+        if (!in_array($this->value, $a_values)) {
+            $this->errors[] = "The field {$this->name} has no valid value.";
+        }
+
+        return $this;
+    }
+
     /**
      * Verify that the fields are validated correctly
      *
@@ -376,7 +415,9 @@ class Validator
     {
         $html = '<ul>';
         foreach($this->getErrors() as $error){
-            $html .= '<li>'.$error.'</li>';
+            if (is_string($error)){
+                $html .= '<li>'.$error.'</li>';
+            }
         }
         $html .= '</ul>';
 

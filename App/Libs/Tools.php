@@ -11,7 +11,7 @@ namespace App\Libs;
  * @link https://rinku-project.io/
  * @version 1.0
  */
-class Tools
+class Tools extends Random
 {
     /**
      * Scape a string before insert in database

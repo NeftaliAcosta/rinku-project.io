@@ -9,7 +9,7 @@ use App\Models\Employees\Exceptions\EmployeeCannotBeUpdatedException;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
 
 /**
- * Employees
+ * EmployeesController
  * Model controller for table `rinku_employees`
  *
  * @author Neftalí Marciano Acosta <neftaliacosta@outlook.com>
@@ -198,6 +198,22 @@ class Employees
     public function getCreationDate(): string
     {
         return $this->creation_date;
+    }
+
+    /**
+     * Get all rows
+     *
+     * @return array
+     */
+    public function getAll(): array
+    {
+        // Instance of Sql class
+        $o_mysql = new MySql();
+
+        // Query in database
+        $response = $o_mysql->select()->from($this->alias_table)->fetchAll()->execute();
+
+        return $response['data'];
     }
 
     /**

@@ -30,6 +30,22 @@ trait ToolsEnums
     }
 
     /**
+     * Get pretty values in array associative
+     *
+     * @return array
+     */
+    public static function getPrettyRolesArray(): array
+    {
+        $prettyValues = [];
+
+        foreach (static::cases() as $case) {
+            $prettyValues[$case->value] = static::pretty($case->value);
+        }
+
+        return $prettyValues;
+    }
+
+    /**
      * Get an array with names and values of enum
      *
      * @return array
