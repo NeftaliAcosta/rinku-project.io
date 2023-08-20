@@ -25,3 +25,7 @@ $this->route->get('/employees/delete/:id', function($employee_id) {
 $this->route->add('GET|POST', '/monthly-movements/all', function() {
     include_once __DIR__ . '/../Views/pages/monthly_movements_all.php';
 });
+
+$this->route->add('GET|POST', '/monthly-movements/new', function() {
+    include_once __DIR__ . '/../Views/pages/monthly_movements_new.php';
+});

@@ -4,8 +4,11 @@ namespace App\Controllers;
 
 use App\Core\SystemException;
 use App\Enums\Roles;
+use App\Libs\Validator;
 use App\Models\Employees\Employees;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
+use App\Models\MonthlyMovements\Exceptions\MonthlyMovementCannotBeCreatedException;
+use App\Models\MonthlyMovements\Exceptions\MonthlyMovementNotFoundException;
 use App\Models\MonthlyMovements\MonthlyMovements;
 use Buki\Router\Http\Controller;
 
@@ -54,6 +57,58 @@ class MonthlyMovementsController extends Controller
 
         // Controller response
         return $data;
+    }
+
+    /**
+     * Save new employee
+     *
+     * @param array $data
+     * @return array
+     */
+    public function create(array $data): array
+    {
+        // Variable response
+        $response = [
+            'success' => true,
+            'message' => null
+        ];
+
+        // Get data information
+        $employee_id = $data['employee_id'];
+        $deliveries = $data['deliveries'];
+
+        // Validating input data
+        $o_validator = new Validator();
+        $o_validator->name('Empleado id')->value($employee_id)->required()->is_int()->min(1);
+        $o_validator->name('Entregas')->value($deliveries)->required()->is_int()->min(1);
+
+        // Response if input data is valid
+        if (!$o_validator->isSuccess()) {
+            $response['success'] = false;
+            $response['message'] = $o_validator->getErrorsHTML();
+
+            return $response;
+        }
+
+        try {
+            // Instance of object model MonthlyMovements
+            $o_monthly_movements = new MonthlyMovements();
+
+            // Set values required
+            $o_monthly_movements->setEmployeeId($employee_id)
+                ->setDeliveries($deliveries);
+
+            // Create new row
+            $o_monthly_movements->create($o_monthly_movements);
+        } catch (MonthlyMovementNotFoundException|MonthlyMovementCannotBeCreatedException $e) {
+            $response['success'] = false;
+            $response['message'] = $e->getMessage();
+
+            return $response;
+        }
+
+        // Controller response
+        return $response;
     }
 
 }
