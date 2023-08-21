@@ -57,6 +57,9 @@ Follow the steps below to install the project successfully
 3. Run command sudo a2ensite rinku-project.io.conf
 4. Add  the next line  `127.0.1.1  rinku-project.io` in hosts file /etc/hosts
 5. Restart apache `sudo systemctl restart apache2`
+6. Rename file sample.dev.env to .dev.env
+7. run `composer install`
+8. run `composer bin-recovery`
 
 ### Commands Cli
 - Reset the database `composer bin-recovery`
