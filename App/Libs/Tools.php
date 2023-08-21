@@ -2,6 +2,8 @@
 
 namespace App\Libs;
 
+use App\Core\SystemException;
+
 /**
  * Tools
  * Contains tools used by the system
@@ -13,38 +15,49 @@ namespace App\Libs;
  */
 class Tools extends Random
 {
-    /**
-     * Scape a string before insert in database
-     *
-     * @param string|null $string $string
-     * @return string
-     */
-    public static function scStr(string|null $string): string
+    public static function months(): array
     {
-        $string = is_null($string) ? '' : $string;
-        $string = trim($string);
-        return addslashes($string);
+        return array (
+            1 => 'Enero',
+            2 => 'Febrero',
+            3 => 'Marzo',
+            4 => 'Abril',
+            5 => 'Mayo',
+            6 => 'Junio',
+            7 => 'Julio',
+            8 => 'Agosto',
+            9 => 'Septiembre',
+            10 => 'Octubre',
+            11 => 'Noviembre',
+            12 => 'Diciembre'
+        );
     }
 
     /**
-     * Scape an int before insert in database
+     * Convert num month to name month
      *
-     * @param int $int
+     * @throws SystemException
+     */
+    public static function getMonthName(int $month): string
+    {
+        $months = self::months();
+
+        // Check if num month exist
+        if (array_key_exists($month, $months)) {
+            return $months[$month];
+        } else {
+            throw new SystemException("Month not valid.");
+        }
+    }
+
+    /**
+     * Get current month
+     *
      * @return int
      */
-    public static function scInt(mixed $int): int
+    public static function getCurrentMonth(): int
     {
-        return (int)$int;
+        return date('n');
     }
 
-    /**
-     * Scape a float before insert in database
-     *
-     * @param mixed $float
-     * @return float
-     */
-    public static function scFloat(mixed $float): float
-    {
-        return (float)$float;
-    }
 }

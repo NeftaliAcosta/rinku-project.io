@@ -28,6 +28,7 @@ $o_mysql->custom("
         `extra_salary` INT NOT NULl,
         `taxes` INT NOT NULL,
         `grocery_vouchers` decimal(10,2) NOT NULL,
+        `month` INT NOT NULL,
         `creation_date` DATETIME NOT NULL,
         PRIMARY KEY (`id`),
         KEY `employee_id` (`employee_id`),
@@ -46,7 +47,8 @@ Cli::e(
 $o_mysql->custom("
     CREATE PROCEDURE `sp_MonthlyMovementCreate`(
         IN `emp_id` INT,
-        IN `emp_deliveries` INT
+        IN `emp_deliveries` INT,
+        IN `num_month` INT
     )
     LANGUAGE SQL
     NOT DETERMINISTIC
@@ -87,8 +89,8 @@ $o_mysql->custom("
         -- Calculate grocery vouchers
         SET local_grocery_vouchers = (local_emp_base_salary + local_extra_salary) * 0.04;
         
-        INSERT INTO {$table_monthly_movements} (employee_id, deliveries, extra_salary, taxes, grocery_vouchers, creation_date)
-        VALUES (local_emp_id, emp_deliveries, local_extra_salary, local_taxes, local_grocery_vouchers, NOW());
+        INSERT INTO {$table_monthly_movements} (employee_id, deliveries, extra_salary, taxes, grocery_vouchers, creation_date, `month`)
+        VALUES (local_emp_id, emp_deliveries, local_extra_salary, local_taxes, local_grocery_vouchers, NOW(), num_month);
     END
 ")->execute();
 
@@ -103,7 +105,8 @@ Cli::e(
 $o_mysql->custom("
 CREATE PROCEDURE `sp_MonthlyMovementUpdate`(
     IN `monthly_movement_id` INT,
-    IN `emp_deliveries` INT
+    IN `emp_deliveries` INT,
+    IN `num_month` INT
 )
 LANGUAGE SQL
 NOT DETERMINISTIC
@@ -154,7 +157,8 @@ BEGIN
     `extra_salary` = local_extra_salary,
     `taxes` = local_taxes,
     `grocery_vouchers` = local_grocery_vouchers,
-    `creation_date` = NOW()
+    `creation_date` = NOW(),
+    `month` = num_month
     WHERE `id` = monthly_movement_id;
 END
 ")->execute();
@@ -176,7 +180,7 @@ CONTAINS SQL
 SQL SECURITY DEFINER
 COMMENT 'View information by monthly_movement_id'
 BEGIN
-    SELECT `id`, `employee_id`, `deliveries`, `extra_salary`, `taxes`, `grocery_vouchers`, `creation_date`
+    SELECT `id`, `employee_id`, `deliveries`, `extra_salary`, `taxes`, `grocery_vouchers`, `creation_date`, `month`
     FROM {$table_monthly_movements}
     WHERE `id` = monthly_movement_id;
 END

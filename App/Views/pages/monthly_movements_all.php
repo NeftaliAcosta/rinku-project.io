@@ -2,6 +2,7 @@
 
 // Get all information from controller
 use App\Controllers\MonthlyMovementsController;
+use App\Libs\Tools;
 
 if (!empty($_POST)) {
     $month_to_search = $_POST['month'];
@@ -12,13 +13,8 @@ if (!empty($_POST)) {
 $o_monthly_movements_controller =  new MonthlyMovementsController();
 $data = $o_monthly_movements_controller->getAll((int)$month_to_search);
 
-// Array months
-$months = array(
-    1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo',
-    4 => 'Abril', 5 => 'Mayo', 6 => 'Junio',
-    7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre',
-    10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'
-);
+// Get array months
+$months = Tools::months();
 
 ?>
 
@@ -42,6 +38,11 @@ $months = array(
                             echo ' selected';
                         }
                         echo '>' . $month_name . '</option>';
+
+                        // List months up to current month
+                        if ($num_month == Tools::getCurrentMonth()) {
+                            break;
+                        }
                     }
                     ?>
                 </select>
@@ -67,7 +68,7 @@ $months = array(
             <th scope="col">Salario total</th>
             <th scope="col">Impuestos</th>
             <th scope="col">Voucher</th>
-            <th scope="col">Fecha de creacion</th>
+            <th scope="col">Mes</th>
             <th scope="col">Acciones</th>
         </tr>
         </thead>
@@ -84,7 +85,7 @@ $months = array(
             <td><?= $value['total_salary']; ?></td>
             <td><?= $value['taxes']; ?></td>
             <td><?= $value['grocery_vouchers']; ?></td>
-            <td><?= $value['creation_date']; ?></td>
+            <td><?= $value['month']; ?></td>
             <td>
                 <a href="<?php echo $_ENV['__PATH__']. 'monthly-movements/view/' . $value['id'] ?>" class="btn btn-primary mb-1">Ver</a>
                 <br>
