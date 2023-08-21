@@ -50,6 +50,11 @@ class MonthlyMovements
     private float $grocery_vouchers;
 
     /**
+     * @var int
+     */
+    private int $month;
+
+    /**
      * @var string
      */
     private string $creation_date;
@@ -88,6 +93,7 @@ class MonthlyMovements
                 $this->extra_salary = $account_data['extra_salary'];
                 $this->taxes = $account_data['taxes'];
                 $this->grocery_vouchers = $account_data['grocery_vouchers'];
+                $this->month = $account_data['month'];
                 $this->creation_date = $account_data['creation_date'];
             } else {
                 throw new MonthlyMovementNotFoundException('Monthly movement not found.');
@@ -221,6 +227,29 @@ class MonthlyMovements
     }
 
     /**
+     * Get MonthlyMovements month
+     *
+     * @return int
+     */
+    public  function getMonth(): int
+    {
+        return $this->month;
+    }
+
+    /**
+     * Set MonthlyMovements month
+     *
+     * @param int $month
+     * @return MonthlyMovements
+     */
+    public function setMonth(int $month): MonthlyMovements
+    {
+        $this->month = $month;
+
+        return $this;
+    }
+
+    /**
      * Set MonthlyMovements creation date
      *
      * @return string
@@ -251,7 +280,7 @@ class MonthlyMovements
                     'value' => $current_year,
                     'separator' => 'AND'
                 ],
-                'MONTH(creation_date) = ?' => [
+                'month = ?' => [
                     'type' => 'numeric',
                     'value' => $month_to_search
                 ]
@@ -280,13 +309,14 @@ class MonthlyMovements
     {
         if (
             $monthly_movement->employee_id != null &&
-            $monthly_movement->deliveries != null
+            $monthly_movement->deliveries != null &&
+            $monthly_movement->month != null
         ) {
             // Instance of Sql class
             $o_mySql = new MySql();
 
             $o_mySql->custom("
-                CALL sp_MonthlyMovementCreate({$monthly_movement->employee_id}, {$monthly_movement->deliveries});
+                CALL sp_MonthlyMovementCreate({$monthly_movement->employee_id}, {$monthly_movement->deliveries}, $monthly_movement->month);
             ")->execute();
         } else {
             throw new MonthlyMovementCannotBeCreatedException('Monthly movement can´t be created.');
@@ -306,13 +336,14 @@ class MonthlyMovements
     {
         if (
             $monthly_movement->id != null &&
-            $monthly_movement->deliveries != null
+            $monthly_movement->deliveries != null &&
+            $monthly_movement->month != null
         ) {
             // Instance of Sql class
             $o_mySql = new MySql();
 
             $o_mySql->custom("
-                CALL sp_MonthlyMovementUpdate({$monthly_movement->id}, {$monthly_movement->deliveries});
+                CALL sp_MonthlyMovementUpdate({$monthly_movement->id}, {$monthly_movement->deliveries}, {$monthly_movement->month});
             ")->execute();
         } else {
             throw new MonthlyMovementCannotBeUpdatedException('Monthly movement can´t be updated.');

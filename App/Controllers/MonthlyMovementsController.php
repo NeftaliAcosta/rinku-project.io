@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\SystemException;
 use App\Enums\Roles;
+use App\Libs\Tools;
 use App\Libs\Validator;
 use App\Models\Employees\Employees;
 use App\Models\Employees\Exceptions\EmployeeNotFoundException;
@@ -56,6 +57,7 @@ class MonthlyMovementsController extends Controller
             $value['grocery_vouchers'] = '$'.$value['grocery_vouchers'];
             $value['extra_salary'] = '$' . number_format($value['extra_salary'], 2, '.', ',');
             $value['taxes'] = $value['taxes'].'%';
+            $value['month'] = Tools::getMonthName($value['month']);
         }
 
         // Controller response
@@ -79,11 +81,13 @@ class MonthlyMovementsController extends Controller
         // Get data information
         $employee_id = $data['employee_id'];
         $deliveries = $data['deliveries'];
+        $month = $data['month'];
 
         // Validating input data
         $o_validator = new Validator();
         $o_validator->name('Empleado id')->value($employee_id)->required()->is_int()->min(1);
         $o_validator->name('Entregas')->value($deliveries)->required()->is_int()->min(1);
+        $o_validator->name('Mes')->value($month)->required()->is_int()->min(1)->max(12);
 
         // Response if input data is valid
         if (!$o_validator->isSuccess()) {
@@ -99,7 +103,8 @@ class MonthlyMovementsController extends Controller
 
             // Set values required
             $o_monthly_movements->setEmployeeId($employee_id)
-                ->setDeliveries($deliveries);
+                ->setDeliveries($deliveries)
+                ->setMonth($month);
 
             // Create new row
             $o_monthly_movements->create($o_monthly_movements);
@@ -133,6 +138,7 @@ class MonthlyMovementsController extends Controller
 
             $response['data']['employee_id'] = $o_monthly_movements->getEmployeeId();
             $response['data']['deliveries'] = $o_monthly_movements->getDeliveries();
+            $response['data']['month'] = $o_monthly_movements->getMonth();
         } catch (MonthlyMovementNotFoundException $e) {
             $response['success'] = false;
             $response['message'] = $e->getMessage();
@@ -161,11 +167,13 @@ class MonthlyMovementsController extends Controller
         // Get data information
         $monthly_movements_id = $data['monthly_movements_id'];
         $deliveries = $data['deliveries'];
+        $month = $data['month'];
 
         // Validating input data
         $o_validator = new Validator();
         $o_validator->name('Momiviento id')->value($monthly_movements_id)->required()->is_int()->min(1);
         $o_validator->name('Entregas')->value($deliveries)->required()->is_int()->min(1);
+        $o_validator->name('Mes')->value($month)->required()->is_int()->min(1)->max(12);
 
         // Response if input data is valid
         if (!$o_validator->isSuccess()) {
@@ -180,7 +188,8 @@ class MonthlyMovementsController extends Controller
             $o_monthly_movements = new MonthlyMovements($monthly_movements_id);
 
             // Set values required
-            $o_monthly_movements->setDeliveries($deliveries);
+            $o_monthly_movements->setDeliveries($deliveries)
+                ->setMonth($month);
 
             // Create new row
             $o_monthly_movements->update($o_monthly_movements);

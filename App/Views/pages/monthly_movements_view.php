@@ -9,6 +9,7 @@ use App\Libs\Tools;
 // Load information to build the form dynamically
 $code = Tools::EmployeeCode();
 $roles = Roles::getPrettyRolesArray();
+$months = Tools::months();
 
 $o_employee_controller = new EmployeesController();
 $a_all_employees = $o_employee_controller->getAll();
@@ -57,6 +58,29 @@ if (!$a_response['success']){
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <select class="form-control" name="month">
+                        <option selected="true" disabled="disabled">Seleccione un mes</option>
+                        <?php
+                        $current_month = date('n');
+                        // Create select option component
+                        foreach ($months as $num_month => $month_name) {
+                            echo '<option value="' . $num_month . '"';
+                            if ($num_month ==$a_response['data']['month']){
+                                echo "selected";
+                            }
+                            echo '>' . $month_name . '</option>';
+
+                            // List months up to current month
+                            if ($num_month == Tools::getCurrentMonth()) {
+                                break;
+                            }
+                        }
+                        ?>
+                    </select>
+                </label>
             </div>
             <div class="form-group">
                 <label for="deliveries">Entregas</label>
