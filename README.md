@@ -58,5 +58,11 @@ Follow the steps below to install the project successfully
 4. Add  the next line  `127.0.1.1  rinku-project.io` in hosts file /etc/hosts
 5. Restart apache `sudo systemctl restart apache2`
 
+### Commands Cli
+- Reset the database `composer bin-recovery`
+- Run the last init to make a specific change to the database `composer bin-init`
+
+![enter image description here](https://i.ibb.co/gMZ2fqg/client-rinku.png)
+
 ### Preview
 ![enter image description here](https://i.ibb.co/zNGCzGR/rinku-preview.png)
